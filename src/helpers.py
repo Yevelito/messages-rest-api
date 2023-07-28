@@ -20,9 +20,8 @@ def ERROR(*args, **kwargs):
 
 def get_secret():
     secret_name = "jwt_keys"
-    region_name = "us-east-1"
+    region_name = os.environ.get("AWS_REGION", "us-east-1")
 
-    # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
@@ -35,9 +34,8 @@ def get_secret():
         )
     except ClientError as e:
         raise e
-    secret = get_secret_value_response['SecretString']
 
-    keys = json.loads(secret)
+    keys = json.loads(get_secret_value_response['SecretString'])
 
     private_key = keys.get("JWT_PRIVATE_KEY").replace(" ", "\n")
     private_key = f"-----BEGIN RSA PRIVATE KEY-----\n{private_key}\n-----END RSA PRIVATE KEY-----"

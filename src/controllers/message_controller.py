@@ -5,18 +5,18 @@ from boto3.dynamodb.conditions import Key
 
 from src.helpers import DEBUG
 
+MSG_EXP_SECS = 15 * 60  # 15 mins
 
 class MessageController:
 
     def save_message_to_db(self, text) -> str:
-        ttl = int(15 * 60)  # 15 minutes in secs
         msg_id = uuid.uuid4().__str__()
         current_time = int(time.time())
         message = {
             "id": msg_id,
             "time": current_time,
             "text": text,
-            "ttl": ttl
+            "ttl": int(time.time() + MSG_EXP_SECS)
         }
         DEBUG("MESSAGE TO DB: {}".format(message))
 

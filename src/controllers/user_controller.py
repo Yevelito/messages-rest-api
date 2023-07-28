@@ -9,11 +9,11 @@ from src.helpers import DEBUG, get_secret
 
 import jwt
 JWT_EXP_SECS = 15 * 60  # 15 mins
+USER_EXP_SECS = 60 * 60  # 60 mins
 
 
 class UserController:
     def create_user(self, login, password):
-        ttl = 16 * 60
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table('APIUsersTable')
         user = table.query(KeyConditionExpression=Key("login").eq(login))
@@ -23,7 +23,7 @@ class UserController:
             user = {
                 "login": login,
                 "password": password,
-                "ttl": ttl
+                "ttl": int(time.time() + USER_EXP_SECS)
             }
             response = table.put_item(Item=user)
             DEBUG(f"response: {response}")
