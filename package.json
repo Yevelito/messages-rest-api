@@ -1,0 +1,14 @@
+{
+  "name": "message-rest-api",
+  "version": "0.1.0",
+  "description": "description",
+  "author": "Evel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://GITLAB_URL"
+  },
+  "dependencies": {
+    "serverless-python-requirements": "^6.0.0"
+  }
+}

@@ -1,0 +1,112 @@
+service: APIMessages
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.10
+  environment:
+    LOG_LEVEL: 1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sss3:*"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - Ref: ServerlessDeploymentBucket
+            - "/*"
+    - Effect: Allow
+      Action:
+        - sts:AssumeRole
+        - logs:CreateLogStream
+        - logs:CreateLogGroup
+        - logs:PutLogEvents
+        - dynamodb:*
+      #        - sns:ListPlatformApplications
+      #        - ses:*
+      #        - s3:*
+      #        - sqs:*
+      #        - sns:*
+      Resource: "*"
+
+package:
+  exclude:
+    - ./**
+  include:
+    - ./src/**
+
+resources:
+  Resources:
+    APIMessagesTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: APIMessagesTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: TRUE
+
+    APIUsersTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: APIUsersTable
+        AttributeDefinitions:
+          - AttributeName: login
+            AttributeType: S
+        KeySchema:
+          - AttributeName: login
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: TRUE
+
+
+
+    MessagesLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        RetentionInDays: 3
+
+
+
+
+functions:
+
+  Messages:
+    handler: src/app.handler
+
+    events:
+      - http:
+          path: /
+          private: false
+          method: any
+      - http:
+          path: /{proxy+}
+          private: false
+          method: any
+#      - http:
+#          path: /messages
+#          private: false
+#          method: any
+#          authorizer: authorizationFunc
+#  authorizationFunc:
+#    handler: src/controllers/user_controller.authorization
+
+
+plugins:
+#  - serverless-plugin-include-dependencies
+  - serverless-python-requirements
+#  - serverless-domain-manager
