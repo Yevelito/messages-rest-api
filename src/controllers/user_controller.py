@@ -5,7 +5,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 
-from src.helpers import DEBUG
+from src.helpers import DEBUG, get_secret
 
 import jwt
 JWT_EXP_SECS = 15 * 60  # 15 mins
@@ -42,27 +42,9 @@ class UserController:
                 return token
         return "User does not exist"
 
-    def get_secret_keys(self):
-        secret_name = "jwt_keys"
-        region_name = "us-east-1"
-
-        session = boto3.session.Session()
-        client = session.client(
-            service_name='secretsmanager',
-            region_name=region_name
-        )
-
-        try:
-            get_secret_value_response = client.get_secret_value(
-                SecretId=secret_name
-            )
-        except ClientError as e:
-            raise e
-        secret = get_secret_value_response['SecretString']
-        return json.loads(secret)
 
     def get_token(self, login):
-        keys = self.get_secret_keys()
+        keys = get_secret()
         payload = {
             "sub": login,
             "iat": int(time.time()),
