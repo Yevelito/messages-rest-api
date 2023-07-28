@@ -20,7 +20,7 @@ def ERROR(*args, **kwargs):
 
 def get_secret():
     secret_name = "jwt_keys"
-    region_name = os.environ.get("AWS_REGION", "us-east-1")
+    region_name = "us-east-1"
 
     session = boto3.session.Session()
     client = session.client(
