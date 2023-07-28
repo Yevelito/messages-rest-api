@@ -2,7 +2,7 @@ import time
 
 import jwt
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver
-from jwt import InvalidSignatureError
+from jwt import InvalidSignatureError, ExpiredSignatureError
 
 from src.helpers import DEBUG, ERROR, get_secret
 from src.views import message_router, user_router
@@ -14,9 +14,6 @@ app.include_router(user_router.router)
 
 def handler(event, context):
     DEBUG(event)
-    auth = validate(event.get("headers", {}).get("Authorization"))
-    if not auth:
-        return "Unauthorized.Sorry"
     return app.resolve(event, context)
 
 
@@ -35,7 +32,8 @@ def validate(token: str) -> bool:
         print("Invalid token")
         print(e)
         return False
-    exp_date = decoded.get("exp")
-    if exp_date < time.time():
+    except ExpiredSignatureError as e:
+        print("Token expired")
+        print(e)
         return False
     return True
