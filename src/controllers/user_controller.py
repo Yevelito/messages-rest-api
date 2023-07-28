@@ -27,7 +27,8 @@ class UserController:
             }
             response = table.put_item(Item=user)
             DEBUG(f"response: {response}")
-            return "Successful"
+            token = self.get_token(login=login)
+            return token
 
     def authorization(self, login, password):
         dynamodb = boto3.resource('dynamodb')
@@ -39,9 +40,9 @@ class UserController:
             if user["password"] == password:
                 token = self.get_token(login)
                 return token
-        return "User not exist"
+        return "User does not exist"
 
-    def get_secret_keys():
+    def get_secret_keys(self):
         secret_name = "jwt_keys"
         region_name = "us-east-1"
 
