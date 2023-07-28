@@ -104,7 +104,7 @@ functions:
 
     events:
       - http:
-          path: /test
+          path: /auth_test
           private: false
           method: any
 

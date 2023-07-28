@@ -11,10 +11,10 @@ from src.helpers import DEBUG
 router = Router()
 
 
-@router.post("/")
-def test():
-    random_id = uuid.uuid4().__str__()
-    return random_id
+# @router.post("/")
+# def test():
+#     random_id = uuid.uuid4().__str__()
+#     return random_id
 
 
 @router.post("/messages")
