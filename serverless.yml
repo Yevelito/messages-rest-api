@@ -10,7 +10,7 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
-        - "sss3:*"
+        - "s3:*"
       Resource:
         Fn::Join:
           - ""
