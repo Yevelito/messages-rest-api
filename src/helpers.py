@@ -43,3 +43,4 @@ def get_secret():
     public_key = f"-----BEGIN PUBLIC KEY-----\n{public_key}\n-----END PUBLIC KEY-----"
 
     return {"public_key": public_key, "private_key": private_key}
+

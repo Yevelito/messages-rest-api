@@ -98,6 +98,16 @@ functions:
           path: /{proxy+}
           private: false
           method: any
+
+  Test:
+    handler: src/app.auth
+
+    events:
+      - http:
+          path: /test
+          private: false
+          method: any
+
 #      - http:
 #          path: /messages
 #          private: false
