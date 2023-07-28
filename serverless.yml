@@ -85,10 +85,8 @@ resources:
 
 
 functions:
-
   Messages:
     handler: src/app.handler
-
     events:
       - http:
           path: /
@@ -100,13 +98,12 @@ functions:
           method: any
 
   Test:
-    handler: src/app.auth
-
+    handler: src/handlers.auth
     events:
       - http:
           path: /auth_test
           private: false
-          method: any
+          method: post
 
 #      - http:
 #          path: /messages
