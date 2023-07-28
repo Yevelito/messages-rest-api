@@ -1,8 +1,5 @@
-import time
-
-import jwt
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver
-from jwt import InvalidSignatureError, ExpiredSignatureError
+
 
 from src.helpers import DEBUG, ERROR, get_secret
 from src.views import message_router, user_router
@@ -17,23 +14,3 @@ def handler(event, context):
     return app.resolve(event, context)
 
 
-def validate(token: str) -> bool:
-    DEBUG(f"Validating token: {token}")
-    if not token:
-        return False
-    token_auth_type = token.split(" ")[0]
-    token_auth_value = token.split(" ")[1]
-    DEBUG(token_auth_type)
-    DEBUG(token_auth_value)
-    keys = get_secret()
-    try:
-        decoded = jwt.decode(token_auth_value, key=keys.get("public_key"), algorithms=["RS256"])
-    except InvalidSignatureError as e:
-        print("Invalid token")
-        print(e)
-        return False
-    except ExpiredSignatureError as e:
-        print("Token expired")
-        print(e)
-        return False
-    return True

@@ -3,7 +3,9 @@ import json
 import os
 
 import boto3
+import jwt
 from botocore.exceptions import ClientError
+from jwt import InvalidSignatureError, ExpiredSignatureError
 
 
 def DEBUG(*args, **kwargs):
@@ -44,3 +46,24 @@ def get_secret():
 
     return {"public_key": public_key, "private_key": private_key}
 
+
+def validate(token: str) -> bool:
+    DEBUG(f"Validating token: {token}")
+    if not token:
+        return False
+    token_auth_type = token.split(" ")[0]
+    token_auth_value = token.split(" ")[1]
+    DEBUG(token_auth_type)
+    DEBUG(token_auth_value)
+    keys = get_secret()
+    try:
+        decoded = jwt.decode(token_auth_value, key=keys.get("public_key"), algorithms=["RS256"])
+    except InvalidSignatureError as e:
+        print("Invalid token")
+        print(e)
+        return False
+    except ExpiredSignatureError as e:
+        print("Token expired")
+        print(e)
+        return False
+    return True

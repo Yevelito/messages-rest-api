@@ -1,13 +1,10 @@
 import json
-import uuid
 
-from src.app import validate
 from src.controllers.message_controller import MessageController
 
-import boto3
 from aws_lambda_powertools.event_handler.api_gateway import Router
 
-from src.helpers import DEBUG
+from src.helpers import DEBUG, validate
 
 router = Router()
 
