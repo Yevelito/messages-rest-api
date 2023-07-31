@@ -3,9 +3,10 @@ import uuid
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from src.helpers import DEBUG
+from src.helpers import DEBUG, INFO
 
 MSG_EXP_SECS = 15 * 60  # 15 mins
+
 
 class MessageController:
 
@@ -27,16 +28,22 @@ class MessageController:
         return msg_id
 
     def get_message_from_db_by_id(self, message_id):
+        INFO(f"Getting message with id: {message_id}")
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table('APIMessagesTable')
-        response = table.query(KeyConditionExpression=Key("id").eq(message_id))
-        return response.get('Items', [])
+        response = table.query(KeyConditionExpression=Key("id").eq(message_id)).get('Items', [])
+        INFO(f"For messages: {len(response)}")
+        DEBUG(f"Messages: {response}")
+        return response
 
     def get_messages_from_db(self):
+        INFO(f"Getting messages from DB")
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table('APIMessagesTable')
-        response = table.scan()
-        return response.get('Items', [])
+        response = table.scan().get('Items', [])
+        INFO(f"For messages: {len(response)}")
+        DEBUG(f"Messages: {response}")
+        return response
 
     def delete_message_from_db_by_id(self, message_id):
         dynamodb = boto3.resource('dynamodb')

@@ -21,6 +21,12 @@ def ERROR(*args, **kwargs):
         print("ERROR({}): {}".format(datetime.datetime.now(), *args, **kwargs))
 
 
+def INFO(*args, **kwargs):
+    log_level = os.environ.get("LOG_LEVEL")
+    if log_level == "1" or log_level == "2":
+        print("INFO({}): {}".format(datetime.datetime.now(), *args, **kwargs))
+
+
 def get_secret():
     secret_name = "jwt_keys"
     region_name = "us-east-1"
@@ -73,6 +79,7 @@ def validate(token: str) -> bool:
 class SuccessRequest:
     @staticmethod
     def http(body, default=None) -> dict:
+        DEBUG(f"got body: {body}")
         body = json.dumps(body, separators=(',', ':'), default=default, cls=DecimalEncoder)
         return {
             "statusCode": 200,
