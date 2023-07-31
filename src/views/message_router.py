@@ -26,7 +26,7 @@ def post_message():
     controller = MessageController()
     result = controller.save_message_to_db(body)
     # return result
-    return SuccessRequest(body = result)
+    return SuccessRequest.http(body=result)
 
 
 @router.get("/messages")
@@ -41,7 +41,7 @@ def get_messages():
     controller = MessageController()
     result = controller.get_messages_from_db()
     # return result
-    return SuccessRequest(body=result)
+    return SuccessRequest.http(body=result)
 
 
 @router.get("/messages/<message_id>")
@@ -56,7 +56,7 @@ def get_message_by_id(message_id):
     controller = MessageController()
     result = controller.get_message_from_db_by_id(message_id=message_id)
     # return result
-    return SuccessRequest(body = result)
+    return SuccessRequest.http(body=result)
 
 
 @router.delete("/messages")
@@ -71,7 +71,7 @@ def delete_messages():
     controller = MessageController()
     result = controller.delete_messages_from_db()
     # return result
-    return SuccessRequest(body = result)
+    return SuccessRequest.http(body=result)
 
 
 @router.delete("/messages/<message_id>")
@@ -86,4 +86,4 @@ def delete_message_by_id(message_id):
     controller = MessageController()
     result = controller.delete_message_from_db_by_id(message_id=message_id)
     # return result
-    return SuccessRequest(body = result)
+    return SuccessRequest.http(body=result)
