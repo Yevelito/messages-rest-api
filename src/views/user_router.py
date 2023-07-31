@@ -2,7 +2,7 @@ import json
 from aws_lambda_powertools.event_handler.api_gateway import Router
 
 from src.controllers.user_controller import UserController
-from src.helpers import DEBUG, SuccessRequest
+from src.helpers import DEBUG
 
 router = Router()
 
@@ -17,8 +17,7 @@ def singup():
 
     controller = UserController()
     result = controller.create_user(body["login"], body["password"])
-    # return result
-    return SuccessRequest.http(body=result)
+    return result
 
 
 @router.post("/auth")
@@ -31,5 +30,4 @@ def login():
 
     controller = UserController()
     result = controller.authorization(body["login"], body["password"])
-    # return result
-    return SuccessRequest.http(body=result)
+    return result

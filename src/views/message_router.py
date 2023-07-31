@@ -4,7 +4,7 @@ from src.controllers.message_controller import MessageController
 
 from aws_lambda_powertools.event_handler.api_gateway import Router
 
-from src.helpers import DEBUG, validate, SuccessRequest, Unauthorized
+from src.helpers import DEBUG, validate
 
 router = Router()
 
@@ -15,8 +15,7 @@ def post_message():
 
     auth = validate(event.get("headers", {}).get("Authorization"))
     if not auth:
-        # return "Unauthorized"
-        return Unauthorized.http()
+        return "Unauthorized"
 
     DEBUG(f"POST REQUEST: {event}")
 
@@ -25,8 +24,7 @@ def post_message():
 
     controller = MessageController()
     result = controller.save_message_to_db(body)
-    # return result
-    return SuccessRequest.http(body=result)
+    return result
 
 
 @router.get("/messages")
@@ -35,13 +33,11 @@ def get_messages():
 
     auth = validate(event.get("headers", {}).get("Authorization"))
     if not auth:
-        # return "Unauthorized"
-        return Unauthorized.http()
+        return "Unauthorized"
 
     controller = MessageController()
     result = controller.get_messages_from_db()
-    # return result
-    return SuccessRequest.http(body=result)
+    return result
 
 
 @router.get("/messages/<message_id>")
@@ -50,13 +46,11 @@ def get_message_by_id(message_id):
 
     auth = validate(event.get("headers", {}).get("Authorization"))
     if not auth:
-        # return "Unauthorized"
-        return Unauthorized.http()
+        return "Unauthorized"
 
     controller = MessageController()
     result = controller.get_message_from_db_by_id(message_id=message_id)
-    # return result
-    return SuccessRequest.http(body=result)
+    return result
 
 
 @router.delete("/messages")
@@ -65,13 +59,11 @@ def delete_messages():
 
     auth = validate(event.get("headers", {}).get("Authorization"))
     if not auth:
-        # return "Unauthorized"
-        return Unauthorized.http()
+        return "Unauthorized"
 
     controller = MessageController()
     result = controller.delete_messages_from_db()
-    # return result
-    return SuccessRequest.http(body=result)
+    return result
 
 
 @router.delete("/messages/<message_id>")
@@ -80,10 +72,8 @@ def delete_message_by_id(message_id):
 
     auth = validate(event.get("headers", {}).get("Authorization"))
     if not auth:
-        # return "Unauthorized"
-        return Unauthorized.http()
+        return "Unauthorized"
 
     controller = MessageController()
     result = controller.delete_message_from_db_by_id(message_id=message_id)
-    # return result
-    return SuccessRequest.http(body=result)
+    return result
