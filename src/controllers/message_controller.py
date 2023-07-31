@@ -48,7 +48,7 @@ class MessageController:
             }
         )
         DEBUG(response)
-        return "200"
+        return "Success"
 
     def delete_messages_from_db(self):
         dynamodb = boto3.resource('dynamodb')
@@ -59,4 +59,4 @@ class MessageController:
             resp = table.delete_item(Key={'id': item['id']})
             DEBUG(resp)
 
-        return "200"
+        return "Success"

@@ -1,7 +1,7 @@
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver
 
 
-from src.helpers import DEBUG, ERROR, get_secret
+from src.helpers import DEBUG
 from src.views import message_router, user_router
 
 app = APIGatewayRestResolver(strip_prefixes=['/test'])

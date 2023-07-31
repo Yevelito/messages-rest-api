@@ -67,3 +67,35 @@ def validate(token: str) -> bool:
         print(e)
         return False
     return True
+
+
+class SuccessRequest:
+    @staticmethod
+    def http(body, default=None) -> dict:
+        body = json.dumps(body, separators=(',', ':'), default=default)
+        return {
+            "statusCode": 200,
+            "body": body,
+            "headers": {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true',
+                'Content-type': 'application/json'
+            }
+        }
+
+
+class Unauthorized(Exception):
+    @staticmethod
+    def http(
+            code: int = 401,
+            message="401 Unauthorized",
+            default=None) -> dict:
+        body = json.dumps({"message": message}, default=default)
+        return {
+            "statusCode": code,
+            "body": body,
+            "headers": {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        }
