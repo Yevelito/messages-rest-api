@@ -1,10 +1,11 @@
 # Messages-rest-api
-Simple REST API project based on AWS.
+Simple REST API project based on AWS with Serverless framework.
 
 Included capabilities: 
-- registration user for 1 hour
+- registration user with 1 hour TTL
 - authorization with JWT token
-- posting messages for 15 minutes
+- posting messages with 15 minutes TTL
+- getting messages
 - deleting messages
 
 Consist of 4 types of routes:

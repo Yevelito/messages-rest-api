@@ -25,11 +25,6 @@ provider:
         - logs:PutLogEvents
         - dynamodb:*
         - secretsmanager:GetSecretValue
-      #        - sns:ListPlatformApplications
-      #        - ses:*
-      #        - s3:*
-      #        - sqs:*
-      #        - sns:*
       Resource: "*"
 
 package:
@@ -105,16 +100,5 @@ functions:
           private: false
           method: post
 
-#      - http:
-#          path: /messages
-#          private: false
-#          method: any
-#          authorizer: authorizationFunc
-#  authorizationFunc:
-#    handler: src/controllers/user_controller.authorization
-
-
 plugins:
-#  - serverless-plugin-include-dependencies
   - serverless-python-requirements
-#  - serverless-domain-manager
