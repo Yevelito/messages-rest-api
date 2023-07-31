@@ -1,4 +1,5 @@
 import datetime
+import decimal
 import json
 import os
 
@@ -72,7 +73,7 @@ def validate(token: str) -> bool:
 class SuccessRequest:
     @staticmethod
     def http(body, default=None) -> dict:
-        body = json.dumps(body, separators=(',', ':'), default=default)
+        body = json.dumps(body, separators=(',', ':'), default=default, cls=DecimalEncoder)
         return {
             "statusCode": 200,
             "body": body,
@@ -90,7 +91,7 @@ class Unauthorized(Exception):
             code: int = 401,
             message="401 Unauthorized",
             default=None) -> dict:
-        body = json.dumps({"message": message}, default=default)
+        body = json.dumps({"message": message}, default=default, cls=DecimalEncoder)
         return {
             "statusCode": code,
             "body": body,
@@ -99,3 +100,13 @@ class Unauthorized(Exception):
                 'Access-Control-Allow-Credentials': 'true'
             }
         }
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            # wanted a simple yield str(o) in the next line,
+            # but that would mean a yield on the line with super(...),
+            # which wouldn't work (see my comment below), so...
+            return (str(o) for o in [o])
+        return super(DecimalEncoder, self).default(o)
