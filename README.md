@@ -99,3 +99,6 @@ Delete specific message from dynamoDB by message's ID.
 Status.
 
 ___
+
+API running domain:
+https://08dlfd9x5d.execute-api.us-east-1.amazonaws.com/dev
